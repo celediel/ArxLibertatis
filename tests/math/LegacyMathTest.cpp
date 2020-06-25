@@ -218,8 +218,18 @@ void LegacyMathTest::vecMatrixConversionTest() {
 	}
 }
 
-void LegacyMathTest::angleConversionTest()
-{
+struct AngleMessage {
+	Anglef a;
+	Anglef b;
+	AngleMessage(Anglef angleA, Anglef angleB) : a(angleA), b(angleB) { }
+	operator std::string() const {
+		std::ostringstream oss;
+		return oss.str();
+	}
+};
+
+void LegacyMathTest::angleConversionTest() {
+	
 	typedef std::vector<Anglef>::iterator Itr;
 	for(Itr it = angles.begin(); it != angles.end(); ++it) {
 		
@@ -229,11 +239,18 @@ void LegacyMathTest::angleConversionTest()
 		
 		glm::quat q3 = toQuaternion(*it);
 		
-		glm::quat q4 = toQuaternion(toAngle(q3));
-		
 		CPPUNIT_ASSERT_EQUAL(q, q2);
 		
 		CPPUNIT_ASSERT_EQUAL(q, q3);
+		
+		Anglef angle = toAngle(q3);
+		
+		glm::quat q4 = toQuaternion(angle);
+		
+		std::cout << "pitch=" << it->getPitch() << " yaw=" << it->getYaw() << " roll=" << it->getRoll() << " → ";
+		std::cout << q3.w << ' ' << q3.x << ' ' << q3.y << ' ' << q3.z << " → ";
+		std::cout << "pitch=" << angle.getPitch() << " yaw=" << angle.getYaw() << " roll=" << angle.getRoll() << " → ";
+		std::cout << q4.w << ' ' << q4.x << ' ' << q4.y << ' ' << q4.z << '\n';
 		
 		CPPUNIT_ASSERT_EQUAL(q3, q4);
 	}

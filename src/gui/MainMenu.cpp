@@ -1330,6 +1330,14 @@ public:
 			cb->setValue(config.interface.fontWeight);
 			addCenter(cb);
 		}
+
+		{
+			std::string label = getLocalised("system_menus_options_minimap_reveal_radius");
+			SliderWidget * sld = new SliderWidget(sliderSize(), hFontMenu, label);
+			sld->valueChanged = boost::bind(&InterfaceOptionsMenuPage::onChangedRevealRadius, this, arg::_1);
+			sld->setValue(int(glm::clamp(config.interface.minimapRevealRadius * 0.5f, 1.f, 20.f)));
+			addCenter(sld);
+		}
 		
 		addBackButton(Page_Options);
 		
@@ -1391,6 +1399,11 @@ private:
 		ARX_UNUSED(str);
 		config.interface.fontWeight = pos;
 		ARX_Text_Init();
+	}
+
+	void onChangedRevealRadius(int state) {
+		// 1 to 20 seems like a good value without being overly cheaty
+		config.interface.minimapRevealRadius = glm::clamp(float(state) * 2.f, 1.f, 20.f);
 	}
 	
 };

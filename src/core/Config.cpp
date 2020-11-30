@@ -80,7 +80,8 @@ const int
 	migration = Config::OriginalAssets,
 	quicksaveSlots = 3,
 	bufferSize = 0,
-	quickLevelTransition = JumpToChangeLevel;
+	quickLevelTransition = JumpToChangeLevel,
+	minimapRevealRadius = 6;
 
 const bool
 	fullscreen = true,
@@ -228,7 +229,8 @@ const std::string
 	hudScaleFilter = "scale_filter",
 	fontSize = "font_size",
 	fontWeight = "font_weight",
-	thumbnailSize = "save_thumbnail_size";
+	thumbnailSize = "save_thumbnail_size",
+	minimapRevealRadius = "minimap_reveal_radius";
 
 // Window options
 const std::string
@@ -484,6 +486,7 @@ bool Config::save() {
 	writer.writeKey(Key::fontSize, interface.fontSize);
 	writer.writeKey(Key::fontWeight, interface.fontWeight);
 	writer.writeKey(Key::hudScaleFilter, interface.scaleFilter);
+	writer.writeKey(Key::minimapRevealRadius, int(interface.minimapRevealRadius));
 	std::ostringstream osst;
 	osst << interface.thumbnailSize.x << 'x' << interface.thumbnailSize.y;
 	writer.writeKey(Key::thumbnailSize, osst.str());
@@ -646,6 +649,8 @@ bool Config::init(const fs::path & file) {
 	interface.scaleFilter = UIScaleFilter(glm::clamp(hudScaleFilter, 0, 1));
 	std::string thumbnailSize = reader.getKey(Section::Interface, Key::thumbnailSize, Default::thumbnailSize);
 	interface.thumbnailSize = parseThumbnailSize(thumbnailSize);
+	int minimapRevealRadius = reader.getKey(Section::Interface, Key::minimapRevealRadius, Default::minimapRevealRadius);
+	interface.minimapRevealRadius = glm::clamp(minimapRevealRadius, 1, 20);
 	
 	// Get window settings
 	std::string windowSize = reader.getKey(Section::Window, Key::windowSize, Default::windowSize);

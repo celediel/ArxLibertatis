@@ -54,6 +54,7 @@ ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
 
 #include "core/Core.h"
 #include "core/Localisation.h"
+#include "core/Config.h"
 
 #include "game/EntityManager.h"
 #include "game/Levels.h"
@@ -426,7 +427,7 @@ void MiniMap::showBookEntireMap(int showLevel, Rect rect, float scale) {
 void MiniMap::revealPlayerPos(int showLevel) {
 	
 	float zoom = 250.f;
-	float maxDistance = 6.0f;
+	float maxDistance = config.interface.minimapRevealRadius;
 	Vec2f start(140.f, 120.f);
 	Vec2f cas(zoom / MINIMAP_MAX_X, zoom / MINIMAP_MAX_Z);
 	

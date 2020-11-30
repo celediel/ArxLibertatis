@@ -171,6 +171,8 @@ public:
 		
 		float fontSize;
 		int fontWeight;
+
+		float minimapRevealRadius;
 		
 		Vec2i thumbnailSize;
 		
